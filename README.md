@@ -1,4 +1,4 @@
-# angular-dashboard-framework
+# pihomeconnect-dashboard-framework
 
 > Dashboard framework with Angular.js and Twitter Bootstrap.
 
@@ -22,8 +22,8 @@ npm install -g grunt-cli
 Clone the repository:
 
 ```bash
-git clone https://github.com/sdorra/angular-dashboard-framework
-cd angular-dashboard-framework
+git clone https://github.com/pihomeserver/pihomeconnect-dashboard-framework
+cd pihomeconnect-dashboard-framework
 ```
 
 Install npm and bower dependencies:
@@ -41,13 +41,13 @@ grunt server
 
 Now you open the sample in your browser at http://localhost:9001/sample
 
-Or you can create a release build of angular-dashboard-framework and the samples:
+Or you can create a release build of pihomeconnect-dashboard-framework and the samples:
 
 ```bash
 grunt
 grunt sample
 ```
-The sample and the final build of angular-dashboard-framework are now in the dist directory.
+The sample and the final build of pihomeconnect-dashboard-framework are now in the dist directory.
 
 
 ## License
