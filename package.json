@@ -1,5 +1,5 @@
 {
-  "name": "angular-dashboard-framework",
+  "name": "pihomeconnect-dashboard-framework",
   "version": "0.7.0-SNAPSHOT",
   "devDependencies": {
     "grunt": "^0.4.5",

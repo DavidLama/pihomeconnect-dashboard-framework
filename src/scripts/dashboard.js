@@ -129,18 +129,6 @@ angular.module('adf')
         adfWidgetFilter: '='
       },
       controller: function($scope){
-        // sortable options for drag and drop
-        $scope.sortableOptions = {
-          connectWith: ".column",
-          handle: ".glyphicon-move",
-          cursor: 'move',
-          tolerance: 'pointer',
-          placeholder: 'placeholder',
-          forcePlaceholderSize: true,
-          opacity: 0.4
-        };
-
-
         var model = {};
         var structure = {};
         var widgetFilter = {};
@@ -193,6 +181,10 @@ angular.module('adf')
           }
         };
 
+        $scope.deleteDashboard = function() {
+          $rootScope.$broadcast('adfDashboardDeleted', name, model);
+        }
+        
         $scope.cancelEditMode = function(){
           $scope.editMode = false;
 		      $scope.modelCopy = angular.copy($scope.modelCopy, $scope.adfModel);
