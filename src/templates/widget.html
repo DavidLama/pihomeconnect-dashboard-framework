@@ -1,3 +1,4 @@
+<!--
 <div class="widget panel panel-default">
   <div class="panel-heading clearfix">
     <h3 class="panel-title">
@@ -6,23 +7,18 @@
         <a href="" title="reload widget content" ng-if="widget.reload" ng-click="reload()">
           <i class="glyphicon glyphicon-refresh"></i>
         </a>
-        <!-- change widget location -->
         <a href="" title="change widget location" ng-if="editMode" sv-handle>
           <i class="glyphicon glyphicon-move"></i>
         </a>
-        <!-- collapse -->
         <a href="" title="collapse widget" ng-show="collapsible && !isCollapsed" ng-click="isCollapsed = !isCollapsed">
           <i class="glyphicon glyphicon-minus"></i>
         </a>
-        <!-- expand -->
         <a href="" title="expand widget" ng-show="collapsible && isCollapsed" ng-click="isCollapsed = !isCollapsed">
           <i class="glyphicon glyphicon-plus"></i>
         </a>
-        <!-- open edit mode -->
         <a href="" title="edit widget configuration" ng-click="edit()" ng-if="editMode">
           <i class="glyphicon glyphicon-cog"></i>
         </a>
-        <!-- remove widget -->
         <a href="" title="remove widget" ng-click="close()" ng-if="editMode">
           <i class="glyphicon glyphicon-remove"></i>
         </a>
@@ -31,5 +27,88 @@
   </div>
   <div class="panel-body" collapse="isCollapsed">
     <adf-widget-content model="definition" content="widget" />
+  </div>
+</div>
+-->
+<div>
+  <!-- Not Tile template -->
+  <div class="widget panel panel-default" ng-if="!definition.config.isWidgetTile">
+    <div class="panel-heading clearfix">
+      <h3 class="panel-title">
+      {{definition.title}}
+        <span class="pull-right">
+          <a href="" title="reload widget content" ng-if="widget.reload" ng-click="reload()">
+            <i class="fa fa-refresh"></i>
+          </a>
+          <!-- change widget location -->
+          <a href="" title="change widget location" ng-if="editMode">
+            <i class="fa fa-arrows"></i>&nbsp;
+          </a>
+          <!-- collapse -->
+          <a href="" title="collapse widget" ng-show="collapsible && !isCollapsed" ng-click="isCollapsed = !isCollapsed">
+            <i class="fa fa-minus"></i>
+          </a>
+          <!-- expand -->
+          <a href="" title="expand widget" ng-show="collapsible && isCollapsed" ng-click="isCollapsed = !isCollapsed">
+            <i class="fa fa-plus"></i>
+          </a>        
+          <!-- open edit mode -->
+          <a href="" title="edit widget configuration" ng-click="edit()" ng-if="editMode">
+            <i class="fa fa-cog"></i>&nbsp;
+          </a>
+          <!-- remove widget -->
+          <a href="" title="remove widget" ng-click="close()" ng-if="editMode">
+            <i class="fa fa-times"></i>
+          </a>
+        </span>
+      </h3>
+    </div>
+    <div class="panel-body" collapse="isCollapsed">
+      <adf-widget-content model="definition" content="widget" />
+    </div>
+  </div>
+  <!-- Tile template -->
+  <style>
+    .tileHeading {
+      background-color: rgba(0, 0, 0, 0.1) !important;
+      border-bottom-width: 0px; 
+    }
+    .tileHeading a {
+      color: #f5f5f5;
+    }
+  </style>
+  <div class="widget panel panel-default" ng-if="definition.config.isWidgetTile" ng-class="definition.config.bgColor">
+    <div class="panel-heading clearfix tileHeading" ng-class="definition.config.bgColor">
+      <h3 class="panel-title">
+        <span class="pull-right">
+          <a href="" title="reload widget content" ng-if="widget.reload" ng-click="reload()">
+            <i class="fa fa-refresh"></i>
+          </a>
+          <!-- change widget location -->
+          <a href="" title="change widget location" ng-if="editMode">
+            <i class="fa fa-arrows"></i>&nbsp;
+          </a>
+          <!-- collapse -->
+          <a href="" title="collapse widget" ng-show="collapsible && !isCollapsed" ng-click="isCollapsed = !isCollapsed">
+            <i class="fa fa-minus"></i>
+          </a>
+          <!-- expand -->
+          <a href="" title="expand widget" ng-show="collapsible && isCollapsed" ng-click="isCollapsed = !isCollapsed">
+            <i class="fa fa-plus"></i>
+          </a>        
+          <!-- open edit mode -->
+          <a href="" title="edit widget configuration" ng-click="edit()" ng-if="editMode">
+            <i class="fa fa-cog"></i>&nbsp;
+          </a>
+          <!-- remove widget -->
+          <a href="" title="remove widget" ng-click="close()" ng-if="editMode">
+            <i class="fa fa-times"></i>
+          </a>
+        </span>
+      </h3>
+    </div>
+    <div class="panel-body" collapse="isCollapsed">
+      <adf-widget-content model="definition" content="widget" />
+    </div>
   </div>
 </div>
