@@ -3,18 +3,25 @@
   <h4 class="modal-title">Add new widget</h4>
 </div>
 <div class="modal-body">
-  <div style="display: inline-block;">
     <dl class="dl-horizontal">
-      <dt ng-repeat-start="(key, widget) in widgets">
-        <a href="" ng-click="addWidget(key)">
-          {{widget.title}}
-        </a>      
-      </dt>
-      <dd ng-repeat-end ng-if="widget.description">
-        {{widget.description}}
-      </dd>
+
+      <accordion close-others="false">
+        <accordion-group ng-repeat="(key, widgetsArrays) in widgets | toArray: true | orderBy: 'category' | groupBy: 'category'" is-open="status.open">
+          <accordion-heading>
+            {{widgetsArrays[0].category}}&nbsp;<i class="pull-right glyphicon" ng-class="{'glyphicon-chevron-down': status.open, 'glyphicon-chevron-right': !status.open}"></i>
+          </accordion-heading>
+            <dt ng-repeat-start="widget in widgetsArrays | orderBy: 'title'">
+              <a href="" ng-click="addWidget(widget.$key)">
+                {{widget.title}}
+              </a>
+            </dt>
+            <dd ng-repeat-end ng-if="widget.description">
+              {{widget.description}}
+            </dd>
+        </accordion-group>
+      </accordion>
+
     </dl>
-  </div>
 </div>
 <div class="modal-footer">
   <button type="button" class="btn btn-primary" ng-click="closeDialog()">Close</button>

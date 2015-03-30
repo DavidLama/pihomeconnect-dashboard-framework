@@ -49,31 +49,39 @@ angular.module('adf')
       }
     }
 
+    /**
+    * Copy widget from old columns to the new model
+    * @param object root the model
+    * @param array of columns
+    * @param counter
+    */
     function fillStructure(root, columns, counter) {
-        counter = counter || 0;
+      counter = counter || 0;
 
-        if (angular.isDefined(root.rows)) {
-            angular.forEach(root.rows, function (row) {
-                angular.forEach(row.columns, function (column) {
-                    // if the widgets prop doesn't exist, create a new array for it.
-                    // this allows ui.sortable to do it's thing without error
-                    if (!column.widgets) {
-                        column.widgets = [];
-                    }
+      if (angular.isDefined(root.rows)) {
+        angular.forEach(root.rows, function (row) {
+          angular.forEach(row.columns, function (column) {
+            // if the widgets prop doesn't exist, create a new array for it.
+            // this allows ui.sortable to do it's thing without error
+            if (!column.widgets) {
+              column.widgets = [];
+            }
 
-                    // if a column exist at the counter index, copy over the column
-                    if (angular.isDefined(columns[counter])) {
-                        copyWidgets(columns[counter], column);
-                        counter++;
-                    }
+            // if a column exist at the counter index, copy over the column
+            if (angular.isDefined(columns[counter])) {
+              // do not add widgets to a column, which uses nested rows
+              if (!angular.isDefined(column.rows)){
+                copyWidgets(columns[counter], column);
+                counter++;
+              }
+            }
 
-                    // run fillStructure again for any sub rows/columns
-                    counter = fillStructure(column, columns, counter);
-                });
-            });
-        }
-
-        return counter;
+            // run fillStructure again for any sub rows/columns
+            counter = fillStructure(column, columns, counter);
+          });
+        });
+      }
+      return counter;
     }
 
     /**
@@ -82,19 +90,19 @@ angular.module('adf')
     * @param array  an array of existing columns; used when recursion happens
     */
     function readColumns(root, columns) {
-        columns = columns || [];
+      columns = columns || [];
 
-        if (angular.isDefined(root.rows)) {
-            angular.forEach(root.rows, function (row) {
-                angular.forEach(row.columns, function (col) {
-                    columns.push(col);
-                    // keep reading columns until we can't any more
-                    readColumns(col, columns);
-                });
-            });
-        }
+      if (angular.isDefined(root.rows)) {
+        angular.forEach(root.rows, function (row) {
+          angular.forEach(row.columns, function (col) {
+            columns.push(col);
+            // keep reading columns until we can't any more
+            readColumns(col, columns);
+          });
+        });
+      }
 
-        return columns;
+      return columns;
     }
 
     function changeStructure(model, structure){
@@ -125,10 +133,23 @@ angular.module('adf')
         structure: '@',
         name: '@',
         collapsible: '@',
+        editable: '@',
         adfModel: '=',
         adfWidgetFilter: '='
       },
       controller: function($scope){
+        // sortable options for drag and drop
+        $scope.sortableOptions = {
+          connectWith: ".column",
+          handle: ".glyphicon-move",
+          cursor: 'move',
+          tolerance: 'pointer',
+          placeholder: 'placeholder',
+          forcePlaceholderSize: true,
+          opacity: 0.4
+        };
+
+
         var model = {};
         var structure = {};
         var widgetFilter = {};
@@ -137,7 +158,8 @@ angular.module('adf')
 
         // Watching for changes on adfModel
         $scope.$watch('adfModel', function(oldVal, newVal) {
-          if (newVal !== null) {
+          // has model changed or is the model attribute not set
+          if (newVal !== null || (oldVal === null && newVal === null)) {
             model = $scope.adfModel;
             widgetFilter = $scope.adfWidgetFilter;
             if ( ! model || ! model.rows ){
@@ -193,6 +215,11 @@ angular.module('adf')
         // edit dashboard settings
         $scope.editDashboardDialog = function(){
           var editDashboardScope = $scope.$new();
+          // create a copy of the title, to avoid changing the title to
+          // "dashboard" if the field is empty
+          editDashboardScope.copy = {
+            title: model.title
+          };
           editDashboardScope.structures = dashboard.structures;
           var instance = $modal.open({
             scope: editDashboardScope,
@@ -203,6 +230,9 @@ angular.module('adf')
             changeStructure(model, structure);
           };
           editDashboardScope.closeDialog = function(){
+            // copy the new title back to the model
+            model.title = editDashboardScope.copy.title;
+            // close modal and destroy the scope
             instance.close();
             editDashboardScope.$destroy();
           };
@@ -222,6 +252,7 @@ angular.module('adf')
           } else {
             widgets = dashboard.widgets;
           }
+
           addScope.widgets = widgets;
           var opts = {
             scope: addScope,
@@ -244,10 +275,16 @@ angular.module('adf')
           };
         };
       },
+      compile: function($element, $attrs){
+        if (!angular.isDefined($attrs.editable)){
+          $attrs.editable = true;
+        }
+      },
       link: function ($scope, $element, $attr) {
         // pass attributes to scope
         $scope.name = $attr.name;
         $scope.structure = $attr.structure;
+        $scope.editable = $attr.editable;
       },
       templateUrl: adfTemplatePath + 'dashboard.html'
     };
